@@ -1,0 +1,24 @@
+#!/bin/bash
+set -e
+
+echo "Starting assemble..."
+
+# Move to source directory
+cd /tmp/src
+
+echo "Current files:"
+ls -l
+
+# Initialize module if missing (safe fallback)
+if [ ! -f go.mod ]; then
+  echo "Initializing go module..."
+  go mod init app || true
+fi
+
+# Download dependencies
+go mod tidy || true
+
+# Build application
+go build -o app .
+
+echo "Build completed successfully"
